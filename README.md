@@ -36,7 +36,7 @@ python RULEARN_IDEA/run_experiments.py
 Some predefined objects are listed in `data/CHIBI_database.xlsx`. If you simply want to add a new object with a unique name or description, you can add a new line to the database file. For objects that only require a basic message flow (e.g., taking a certain action results in a specific message), you can create them by modifying only the `data/CHIBI_database.xlsx` file.
 
 However, for more complex objects (like the reactor used in our study) that require system-level variable changes, you'll need to create a new subclass that inherits from the Fixed_Interact_Pipeline_Object_Base class in `fixed_interactive_pipeline_objects.py`. This setup allows you to work with system-level variables to build a state machine object, and you can also add custom variables for more complex effects.
-For example, here’s a state machine object (a animal) that automatically finds and eats an object with name you specified in the `data/CHIBI_database.xlsx` (for example we have a sheep will automatically eat cabbage when no agent seen in the same space defined in the database):
+For example, here’s a state machine object (an animal) that automatically finds and eats an object with the name you specified in the `data/CHIBI_database.xlsx` (for example we have a sheep will automatically eat cabbage when no agent seen in the same space defined in the database):
 
 ```python
 class StateMachineObjectAnimal(StateMachineObjectsBase):
