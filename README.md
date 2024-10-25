@@ -1,6 +1,5 @@
 # RULEARN-IDEA
-This is the official repository for "[IDEA: Enhancing the Rule Learning Ability of Large Language Model Agent through Induction, Deduction, and Abduction]([https://arxiv.org/abs/2310.01405](https://arxiv.org/abs/2408.10455))"  
-by Kaiyu He, Mian Zhang, Shuo Yan, Peilin Wu, and Zhiyu Chen.
+This is the official repository for "[IDEA: Enhancing the Rule Learning Ability of Large Language Model Agent through Induction, Deduction, and Abduction]([https://arxiv.org/abs/2310.01405](https://arxiv.org/abs/2408.10455))" by Kaiyu He, Mian Zhang, Shuo Yan, Peilin Wu, and Zhiyu Chen.
 
 <img align="center" src="figures/RULEARN_IDEA_introduction.png" width="750">
 
@@ -12,12 +11,12 @@ We introduce RULEARN, a novel benchmark specifically designed to assess the rule
 ```bash
 git clone https://github.com/MeanStudent/RULEARN_IDEA_project.git
 cd RULEARN_IDEA_project
-pip install -r requirements.txt.
+pip install -r requirements.txt
 ```
 
 ## Quickstart
 
-An introductory example is provided in example_notebook.ipynb. Feel free to run a single puzzle with selected models to explore the RULEARN environment in action.
+An introductory example is provided in `example_notebook.ipynb`. Feel free to run a single puzzle with selected models to explore the RULEARN environment in action.
 
 You can also run the following code to solve the puzzle yourself. This is the same code we used with human participants in our study.
 
