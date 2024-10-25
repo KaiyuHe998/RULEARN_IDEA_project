@@ -26,8 +26,7 @@ python RULEARN_IDEA/human_test.py
 
 ## Reproduction
 
-The code runs a batch of puzzles in parrllele. If you want to reproduce the result, please specify the model name and your openai token and otherthings needed in the RULEARN_IDEA/run_experiments.py
-You can using the following code to run the experiment
+The code runs a batch of puzzles in parallel. To reproduce the results, please specify the model name, your OpenAI token, and any other necessary parameters in RULEARN_IDEA/run_experiments.py. Use the following code to run the experiment:
 ```bash
 python RULEARN_IDEA/run_experiments.py
 ```
