@@ -11,7 +11,7 @@ We introduce RULEARN, a novel benchmark specifically designed to assess the rule
 ```bash
 git clone https://github.com/MeanStudent/RULEARN_IDEA_project.git
 cd RULEARN_IDEA_project
-pip install -r requirements.txt.
+pip install -r requirements.txt
 ```
 
 ## Quickstart
