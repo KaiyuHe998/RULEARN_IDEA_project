@@ -1,5 +1,5 @@
 # RULEARN-IDEA
-This is the official repository for "[IDEA: Enhancing the Rule Learning Ability of Large Language Model Agent through Induction, Deduction, and Abduction]([https://arxiv.org/abs/2310.01405](https://arxiv.org/abs/2408.10455)" by Kaiyu He, Mian Zhang, Shuo Yan, Peilin Wu, and Zhiyu Chen.
+This is the official repository for "[IDEA: Enhancing the Rule Learning Ability of Large Language Model Agent through Induction, Deduction, and Abduction](https://arxiv.org/abs/2310.01405)" by Kaiyu He, Mian Zhang, Shuo Yan, Peilin Wu, and Zhiyu Chen.
 
 <img align="center" src="figures/RULEARN_IDEA_introduction.png" width="750">
 
