@@ -78,7 +78,7 @@ class Fixed_pipeline_Thing_Creator(Fixed_Interact_Pipeline_Object_Base):
         return super().return_action_information_construct(attemptation_action)
 ```
 
-#### State machine objects (Can also be interactive by agents)
+#### State machine objects (Can also be interactive to agents)
 The RULEARN framework also supports state machine objects, including simple NPCs or other entities that automatically interact with or influence the environment under specific conditions. You can define these state machine objects by creating a subclass of StateMachineObjectsBase in fixed_interactive_pipeline_objects.py.
 For example, here’s how to define a state machine object for an animal that automatically seeks and consumes a specified item from data/CHIBI_database.xlsx. In this database, a sheep is defined as a state machine object that will eat cabbage whenever no agent named "SAM" is in the same space.
 
