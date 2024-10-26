@@ -33,10 +33,51 @@ python RULEARN_IDEA/run_experiments.py
 
 ## Create your own object and puzzles
 
-Some predefined objects are listed in `data/CHIBI_database.xlsx`. If you simply want to add a new object with a unique name or description, you can add a new line to the database file. For objects that only require a basic message flow (e.g., taking a certain action results in a specific message), you can create them by modifying only the `data/CHIBI_database.xlsx` file.
+Some predefined objects are listed in data/CHIBI_database.xlsx. To add a new object with a unique name or description, you can simply add a new row in this database file. For objects that only require a basic message flow (e.g., performing a certain action triggers a specific message), modifying only the data/CHIBI_database.xlsx file is sufficient.
+However, for more complex objects (such as the reactor used in our study) that involve system-level variable changes, you’ll need to create a new subclass inheriting from Fixed_Interact_Pipeline_Object_Base in `fixed_interactive_pipeline_objects.py`. This setup allows you to work with system-level variables to design an object that can change the environment or trigger special effects, with the flexibility to add custom variables for more advanced effects.
+For example, consider a simple "Thing creator" object defined as follows: when the agent activates its interactive action, this object will generate a new item and add it to the agent's inventory. For example, a coffee machine that can produce coffee when ever an agent turns it on.
+```python
+class Fixed_pipeline_Thing_Creator(Fixed_Interact_Pipeline_Object_Base):
+    def show(self):
+        print(self.Keyword)
+        print(self.Information)
+        print(self.Parse_pipeline_dict)
+        
+    def get_information(self, viewer:Optional[Union[str,'CHIBI.CHIBI_Base']] = None):
+        return super().get_information(viewer)
+        
+    def get_keyword(self):
+        return f'<{self.Keyword}>'
 
-However, for more complex objects (like the reactor used in our study) that require system-level variable changes, you'll need to create a new subclass that inherits from the Fixed_Interact_Pipeline_Object_Base class in `fixed_interactive_pipeline_objects.py`. This setup allows you to work with system-level variables to build a state machine object, and you can also add custom variables for more complex effects.
-For example, here’s a state machine object (an animal) that automatically finds and eats an object with the name you specified in the `data/CHIBI_database.xlsx` (for example we have a sheep will automatically eat cabbage when no agent seen in the same space defined in the database):
+    def destory(self):
+        if self.Belongs_to is not None:
+            self.Belongs_to.object_delete(self)
+
+    def edit(self):
+        assert False, f'''Information of {type(self)} can only be edited via predefined pipeline'''
+
+    # Fixed object pipeline interfaces
+    def decide_input(self, attemptation_action:'plan_system.Attemptation_Interactive_Action', memory_use:Optional[int] = None, memory_retrieve_type = 'Most_recent')->str:  # add a format for GPT to follow the format of generated input
+        return super().decide_input(attemptation_action, memory_use = memory_use) # Regular Fixed pipeline thing will only need to dec
+
+        
+    def systemic_parse(self, attemptation_action:'plan_system.Attemptation_Interactive_Action', memory_use:Optional[int] = None):
+        # define systemic level change here!
+        super().systemic_parse(attemptation_action, memory_use = memory_use)
+        if attemptation_action.Selected_action_interactive_pipeline['Systemic_parse_id'] == 'get item':
+            # currently only create first item
+            object_keyword = attemptation_action.Selected_action_interactive_pipeline['Linked_objects'][0]
+            new_object = Fixed_Block_helper.create_fixed_object_with_database({'Object_id':0,
+                                                                               'Keyword':object_keyword,
+                                                                               'Information':f'''One unit of material "{object_keyword}"'''})
+            attemptation_action.Host_CHIBI.Profile.Items.object_add(new_object)
+            
+
+    def return_action_information_construct(self, attemptation_action:'plan_system.Attemptation_Interactive_Action'):
+        return super().return_action_information_construct(attemptation_action)
+```
+The RULEARN framework also supports state machine objects, such as simple NPCs or other entities that automatically change or influence the environment under specific conditions. You can define state machine objects by inheriting from StateMachineObjectsBase in `fixed_interactive_pipeline_objects.py`.
+For example, consider a state machine object (an animal) that automatically seeks and consumes an object with a specified name from data/CHIBI_database.xlsx. In this database, a sheep is defined as belonging to this class and will automatically eat cabbage when there is no agent named "SAM" in the same space. 
 
 ```python
 class StateMachineObjectAnimal(StateMachineObjectsBase):
