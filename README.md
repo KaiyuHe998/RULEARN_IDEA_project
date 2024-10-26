@@ -33,9 +33,10 @@ python RULEARN_IDEA/run_experiments.py
 
 ## Create your own object and puzzles
 
+#### Interactive objects
 Some predefined objects are listed in data/CHIBI_database.xlsx. To add a new object with a unique name or description, you can simply add a new row in this database file. For objects that only require a basic message flow (e.g., performing a certain action triggers a specific message), modifying only the data/CHIBI_database.xlsx file is sufficient.
 However, for more complex objects (such as the reactor used in our study) that involve system-level variable changes, you’ll need to create a new subclass inheriting from Fixed_Interact_Pipeline_Object_Base in `fixed_interactive_pipeline_objects.py`. This setup allows you to work with system-level variables to design an object that can change the environment or trigger special effects, with the flexibility to add custom variables for more advanced effects.
-For example, consider a simple "Thing creator" object defined as follows: when the agent activates its interactive action, this object will generate a new item and add it to the agent's inventory. For example, a coffee machine that can produce coffee when ever an agent turns it on.
+For example, consider a simple "Thing creator" object defined as follows: when the agent activates its interactive action, this object will generate a new item and add it to the agent's inventory. For example, a coffee machine that can produce coffee whenever an agent turns it on.
 ```python
 class Fixed_pipeline_Thing_Creator(Fixed_Interact_Pipeline_Object_Base):
     def show(self):
@@ -76,8 +77,10 @@ class Fixed_pipeline_Thing_Creator(Fixed_Interact_Pipeline_Object_Base):
     def return_action_information_construct(self, attemptation_action:'plan_system.Attemptation_Interactive_Action'):
         return super().return_action_information_construct(attemptation_action)
 ```
-The RULEARN framework also supports state machine objects, such as simple NPCs or other entities that automatically change or influence the environment under specific conditions. You can define state machine objects by inheriting from StateMachineObjectsBase in `fixed_interactive_pipeline_objects.py`.
-For example, consider a state machine object (an animal) that automatically seeks and consumes an object with a specified name from data/CHIBI_database.xlsx. In this database, a sheep is defined as belonging to this class and will automatically eat cabbage when there is no agent named "SAM" in the same space. 
+
+#### State machine objects (Can also be interactive by agents)
+The RULEARN framework also supports state machine objects, including simple NPCs or other entities that automatically interact with or influence the environment under specific conditions. You can define these state machine objects by creating a subclass of StateMachineObjectsBase in fixed_interactive_pipeline_objects.py.
+For example, here’s how to define a state machine object for an animal that automatically seeks and consumes a specified item from data/CHIBI_database.xlsx. In this database, a sheep is defined as a state machine object that will eat cabbage whenever no agent named "SAM" is in the same space.
 
 ```python
 class StateMachineObjectAnimal(StateMachineObjectsBase):
@@ -115,8 +118,8 @@ class StateMachineObjectAnimal(StateMachineObjectsBase):
         For example, this animal can be patted or ridden by an agent.
         """
         pass
-
 ```
+#### Environment setup
 To set up a new interactive environment, follow the dictionary structure in `all_puzzle_settings.py`. Define the space names, edges, and populate it with objects you’ve defined.
 ## Citation
 If you find this useful in your research, please consider citing:
