@@ -125,13 +125,7 @@ def init_puzzle(puzzle_setting_file_name:str,
         elif puzzle_level == 2:
             CHIBI_profile.Current_situation += ''' Currently, you see from a note on the ground that says: "Focus on blue it hides the truth."'''
         CHIBI_profile.Current_situation += f'''You can test your hypothesis by entering the password into the door. However, be aware that if you exceed the attempt limit, the password and hint will change.'''
-    elif puzzle_setting_file_name == 'Function_operator_puzzles':
-        CHIBI_profile.Current_situation += f'''You can test your hypothesis by entering values into the door. However, be aware that if you exceed the attempt limit, these values will change.'''
-        if puzzle_level == 1:
-            CHIBI_profile.Current_situation += " Currently, you know that the 3-digit password for the <Code Secured Door> is determined as follows: the first digit corresponds to the number of oil paintings in a specific color, the second digit to the number of acrylic paintings in that color, and the third digit to the number of watercolor paintings in the same color."
-        elif puzzle_level == 2:
-            CHIBI_profile.Current_situation += ''' Currently, you see a note on the ground that says: "Focus on blue it hides the truth."'''
-        CHIBI_profile.Current_situation += f'''You can test your hypothesis by entering the password into the door. However, be aware that if you exceed the attempt limit, the password and hint will change.'''
+    
     elif puzzle_setting_file_name == 'Function_operator_puzzles':
         CHIBI_profile.Current_situation += f'''You can test your hypothesis by entering values into the door. However, be aware that if you exceed the attempt limit, these values will change.'''
     if not human_test_bool:
