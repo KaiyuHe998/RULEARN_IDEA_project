@@ -1431,10 +1431,22 @@ class Plan_System_CHIBI_main_character(Plan_System_Base):
                 for action in top_n_action_list:
                     if isinstance(action[0], Attemptation_Abduction_Action):
                         return action[0]
+                    
+        if self.Host_CHIBI.Do_abduction:
+            if self.Host_CHIBI.Special_label != 'Reactor_puzzles': # we find out that LLMs are not very sensible to character level operations, how ever when setting to low temperature, they are able to tell whether current hypothesis is consistant with observations, let them repeatedly call this may addup to cost but will turned out with better hypothesis. Decide add this or not before running the experiment.
+                if isinstance(self.Previous_called_action, Attemptation_Abduction_Action): # avoid calling the induction repeatedly
+                    return_action_list = []
+                    for action in top_n_action_list:
+                        if isinstance(action[0], Attemptation_Abduction_Action):
+                            pass
+                        else:
+                            return_action_list.append(action)
+                    top_n_action_list = return_action_list
+                    
                 
         
-        #If there is no hypothesis then do not show the the modify hypothesis action to agent
-        #If the abduction is set to forced call after each interaction, then do not need to show modify hypothesis action
+        #If there is no hypothesis then do not show the the modify inductive to agent
+        #If the abduction is set to forced call after each interaction, then do not need to show inductive action
         if self.Host_CHIBI.Do_abduction:
             if self.Host_CHIBI.Memory_stream.Cur_assumption_and_plan is None or self.forced_abduction:
                 remove_revise_assumption_action = None

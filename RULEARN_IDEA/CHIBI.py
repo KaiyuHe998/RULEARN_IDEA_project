@@ -397,12 +397,13 @@ class CHIBI_main_character(CHIBI_Base):
                 whole_message = generated_whole_test['messages']
                 whole_message = whole_message[-1]
             else:
-                input_data = [Prompt + '\n' + Input]
+                input_data = [Prompt + '\n' + Input + '\Please finish your answer within 100 words make it consice and do not repeat above instructions.']
                 input_ids = self.Huggingface_tokenizer(input_data, return_tensors="pt", padding=True).to(self.Huggingface_model.device)
                 outputs = self.Huggingface_model.generate(**input_ids,
                                               max_new_tokens=self.Huggingface_generate_max_len,     
-                                              num_beams=1,                
-                                              temperature=1,            
+                                              num_beams=1,      
+                                              do_sample = True,
+                                              temperature = 0.01,
                                               top_p=None,                 
                                               top_k=None)
                 generated_str = [self.Huggingface_tokenizer.decode(outputs[i],skip_special_tokens=True) for i in range(len(outputs))]
@@ -435,7 +436,7 @@ class CHIBI_main_character(CHIBI_Base):
             return generated_result
         else:
             #assert self.Logger is not None, f'''If you are using batch generator and threading, you need to specify a logger for each puzzle running'''
-            input_prompt = Prompt + '\n\n' + Input
+            input_prompt = Prompt + '\n\n' + Input + "\Please finish your answer within 100 words make it consice and do not repeat above instructions."
             if len(self.previous_log_information) > 0:
                 generated_result = self.previous_log_information.pop(0).split('**Generated_answer**:')[1].replace('<New Row>','\n')
             else:
@@ -652,7 +653,7 @@ class CHIBI_Human(CHIBI_Base):
         if logging_label == 'Interact_input':
             print(f'''{utils.decorate_text_with_color('-----------------Now decide your input based on the followin instruction:-----------------','cyan',bold = True, deep = True)}''')
         if logging_label == 'Induction' or logging_label == 'Abduction':
-            human_input = input(Prompt + '\n\n' + Input +'\n\nPlease finish your answer within 512 words make it as concise as possible.\n')
+            human_input = input(Prompt + '\n\n' + Input +'\n\nPlease finish your answer within 512 words make it as concise as possible.\n') # TODO read the max length from the parameters
         else:
             human_input = input(Prompt + '\n\n' + Input)
         if parse_function_str is None:

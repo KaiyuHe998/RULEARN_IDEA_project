@@ -149,7 +149,7 @@ Function_operator_puzzles = {
                     },
         'puzzle11':{'Map':{'Puzzle room':[]},
                     # item: {Object_id:int, Keyword:str, Information:str, Success_condition:str}  # can pass an dict with these keywords to modify the object with new information and keyword
-                   'Space_items': {'Puzzle room':[{'Object_id':68,'Special_label':'''True,6*x^2 + 4*1/x,4*1/x'''},69]},
+                   'Space_items': {'Puzzle room':[{'Object_id':68,'Special_label':'''True,6*x^2+4*1/x,4*1/x'''},69]},
                    'Space_item_containers':{},
                    'Edges': {},
                    'Agent': {'Name':'Sam',
@@ -163,7 +163,7 @@ Function_operator_puzzles = {
                     },
         'puzzle12':{'Map':{'Puzzle room':[]},
                     # item: {Object_id:int, Keyword:str, Information:str, Success_condition:str}  # can pass an dict with these keywords to modify the object with new information and keyword
-                   'Space_items': {'Puzzle room':[{'Object_id':68,'Special_label':'''True,1*sin(x) + 5*x,5*1/x, 1*|x|'''},69]},
+                   'Space_items': {'Puzzle room':[{'Object_id':68,'Special_label':'''True,1*sin(x)+5*x,5*1/x, 1*|x|'''},69]},
                    'Space_item_containers':{},
                    'Edges': {},
                    'Agent': {'Name':'Sam',
@@ -191,7 +191,7 @@ Function_operator_puzzles = {
                     },
         'puzzle14':{'Map':{'Puzzle room':[]},
                     # item: {Object_id:int, Keyword:str, Information:str, Success_condition:str}  # can pass an dict with these keywords to modify the object with new information and keyword
-                   'Space_items': {'Puzzle room':[{'Object_id':68,'Special_label':'''True,2*x + 3*1/x,2*1/x'''},69]},
+                   'Space_items': {'Puzzle room':[{'Object_id':68,'Special_label':'''True,2*x+3*1/x,2*1/x'''},69]},
                    'Space_item_containers':{},
                    'Edges': {},
                    'Agent': {'Name':'Sam',
@@ -642,7 +642,7 @@ Art_gallery_puzzles = {
                     # watercolor paints
                     # 58:Yellow, 59:Green, 60:Blue, 61:Blue, 62:Blue, 
                     # item: {Object_id:int, Keyword:str, Information:str, Success_condition:str}  # can pass an dict with these keywords to modify the object with new Keyword and information
-                   'Space_items': {'Corridor':[{'Object_id':65,'Special_label':'Level1'},44,50,54,57,58,61,59]},
+                   'Space_items': {'Corridor':[{'Object_id':65,'Special_label':'Level1'},48,49,57,53,62,61]},
                    'Space_item_containers':{},
                    'Edges': {},
                    'Agent': {'Name':'Sam',
@@ -1234,7 +1234,7 @@ Art_gallery_puzzles = {
                     # watercolor paints
                     # 58:Yellow, 59:Green, 60:Blue, 61:Blue, 62:Blue, 
                     # item: {Object_id:int, Keyword:str, Information:str, Success_condition:str}  # can pass an dict with these keywords to modify the object with new Keyword and information
-                   'Space_items': {'Corridor':[{'Object_id':65,'Special_label':'Level2'},45,49,51,56,52,55,53]},
+                   'Space_items': {'Corridor':[{'Object_id':65,'Special_label':'Level2'},45,49,51,56,52,55,53,58,61,62]},
                    'Space_item_containers':{},
                    'Edges': {},
                    'Agent': {'Name':'Sam',
@@ -1300,7 +1300,7 @@ Art_gallery_puzzles = {
                     # watercolor paints
                     # 58:Yellow, 59:Green, 60:Blue, 61:Blue, 62:Blue, 
                     # item: {Object_id:int, Keyword:str, Information:str, Success_condition:str}  # can pass an dict with these keywords to modify the object with new Keyword and information
-                   'Space_items': {'Corridor':[{'Object_id':65,'Special_label':'Level2'},48,50,46,44,53,56,57,52,55,61,58,62]},
+                   'Space_items': {'Corridor':[{'Object_id':65,'Special_label':'Level2'},48, 50, 51, 47, 44,53, 52, 57,59, 61, 60, 58, 62]},
                    'Space_item_containers':{},
                    'Edges': {},
                    'Agent': {'Name':'Sam',
@@ -1660,7 +1660,7 @@ Reactor_puzzles = {
                    },
         'puzzle5':{'Map':{'Chemical laboratory':[]},
                     # item: {Object_id:int, Keyword:str, Information:str, Success_condition:str}  # can pass an dict with these keywords to modify the object with new information and keyword
-                   'Space_items': {'Chemical laboratory':[{'Object_id':66,'Information':'''It's a very advanced material reactor that can put up to two of any material into it to create a reaction. The reactor provides unlimited one-letter raw material and other materials you've already synthesized.''','Special_label':'1,A,B,C,D,E,F'},{'Object_id':64,'Special_label':"FEADA"}]},
+                   'Space_items': {'Chemical laboratory':[{'Object_id':66,'Information':'''It's a very advanced material reactor that can put up to two of any material into it to create a reaction. The reactor provides unlimited one-letter raw material and other materials you've already synthesized.''','Special_label':'1,A,B,C,D,E,F'},{'Object_id':64,'Special_label':"FEADE"}]},
                    'Space_item_containers':{},
                    'Edges': {},
                    'Agent': {'Name':'Sam',
@@ -1786,7 +1786,7 @@ Reactor_puzzles = {
                     },
         'puzzle14':{'Map':{'Chemical laboratory':[]},
                     # item: {Object_id:int, Keyword:str, Information:str, Success_condition:str}  # can pass an dict with these keywords to modify the object with new information and keyword
-                   'Space_items': {'Chemical laboratory':[{'Object_id':66,'Information':'''It's a very advanced material reactor that can put up to two of any material into it to create a reaction. The reactor provides unlimited one-letter raw material and other materials you've already synthesized.''','Special_label':'3,A,B,C,D,E,F'},{'Object_id':64,'Special_label':"FEADE"}]},
+                   'Space_items': {'Chemical laboratory':[{'Object_id':66,'Information':'''It's a very advanced material reactor that can put up to two of any material into it to create a reaction. The reactor provides unlimited one-letter raw material and other materials you've already synthesized.''','Special_label':'3,A,B,C,D,E,F'},{'Object_id':64,'Special_label':"ABCDEF"}]},
                    'Space_item_containers':{},
                    'Edges': {},
                    'Agent': {'Name':'Sam',

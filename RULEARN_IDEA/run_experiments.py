@@ -3,8 +3,8 @@ import torch
 from tqdm.notebook import tqdm
 
 # transformers Model save path & gpu setup
-os.environ["CUDA_VISIBLE_DEVICES"] = "0,1" # set your gpus
-os.environ["TRANSFORMERS_CACHE"] = '../hg_model_cache'
+os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3" # set your gpus
+os.environ["TRANSFORMERS_CACHE"] = "path to save the models" 
 os.environ["TOKENIZERS_PARALLELISM"] = 'true'
 if torch.cuda.is_available():
     print("available num GPU", torch.cuda.device_count())
@@ -60,6 +60,16 @@ from openai import AsyncOpenAI
 Model_name = None
 #'gpt-3.5-turbo-0125'#'gpt-4-1106-preview'#'gpt-3.5-turbo-0125'#'gpt-4-turbo-2024-04-09'#'gpt-3.5-turbo-0125'
 
+import pickle
+with open('data/Function_operator_puzzles', 'rb') as file:
+    Function_operator_puzzles_enhanced = pickle.load(file)
+    
+with open('data/Art_gallery_puzzles', 'rb') as file:
+    Art_gallery_puzzles_enhanced = pickle.load(file)
+
+with open('data/Reactor_puzzles', 'rb') as file:
+    Reactor_puzzles_enhanced = pickle.load(file)
+    
 def generate_puzzle_spaces(puzzle_setting_file:Dict[str, Any],
                            puzzle_level:int = 1,
                            puzzle_index:int = 1,
@@ -77,6 +87,7 @@ def generate_puzzle_spaces(puzzle_setting_file:Dict[str, Any],
     return Space_Manager_System_Global, CHIBI_profile, puzzle_setting
     
 def init_puzzle(puzzle_setting_file_name:str,
+                puzzle_round:int,
                 puzzle_level:int,
                 puzzle_index:int,
                 Do_abduction:bool = False,
@@ -86,12 +97,17 @@ def init_puzzle(puzzle_setting_file_name:str,
                 CHIBI_name:Optional[str] = None,
                 Batch_generator:Optional[utils.Prompt_batch_generator] = None,
                 forced_abduction:bool = False):
-    
-    puzzle_dict = {'Reactor_puzzles':Reactor_puzzles,
-                   'Art_gallery_puzzles':Art_gallery_puzzles,
-                   'Function_operator_puzzles':Function_operator_puzzles}
-    
-    puzzle_setting_file = puzzle_dict[puzzle_setting_file_name]
+    if puzzle_round == 1:
+        puzzle_dict = {'Reactor_puzzles':Reactor_puzzles,
+                       'Art_gallery_puzzles':Art_gallery_puzzles,
+                       'Function_operator_puzzles':Function_operator_puzzles}
+
+        puzzle_setting_file = puzzle_dict[puzzle_setting_file_name]
+    else:
+        puzzle_dict = {'Reactor_puzzles':Reactor_puzzles_enhanced[f'round{puzzle_round}'],
+                       'Art_gallery_puzzles':Art_gallery_puzzles_enhanced[f'round{puzzle_round}'],
+                       'Function_operator_puzzles':Function_operator_puzzles_enhanced[f'round{puzzle_round}']}
+        puzzle_setting_file = puzzle_dict[puzzle_setting_file_name]
     Space_Manager_System_Global, CHIBI_setting, puzzle_setting = generate_puzzle_spaces(puzzle_setting_file, 
                                                                         puzzle_level, 
                                                                         puzzle_index, 
@@ -179,7 +195,9 @@ def run_an_experiment(csv_file_name:str,
         Model_name = Model_name.replace('/','_') 
         # Model_name only used for logging file, so if there is '/' in model name it is a huggingface name, the inferences happens in the Batch_generator
     Space_Manager_System_Global, CHIBI_agent, puzzle_setting = init_puzzle(puzzle_name, 
-                                                                           puzzle_level = puzzle_level, puzzle_index = puzzle_index,
+                                                                           puzzle_round = round_index,
+                                                                           puzzle_level = puzzle_level, 
+                                                                           puzzle_index = puzzle_index,
                                                                            Do_abduction = Do_abduction, 
                                                                            Model_name = Model_name,
                                                                            human_test_bool = human_test_bool, 
@@ -361,26 +379,26 @@ if __name__ == '__main__':
     #'gpt-3.5-turbo-0125'
     #'gpt-4o-2024-08-06'
     max_length = 512
-    openai_model_names = ['gpt-4o-2024-05-13','gpt-3.5-turbo-0125','gpt-4o-2024-08-06','gpt-4o-global-batch','gpt-4-global-batch']
-    model_name = 'gpt-4o-global-batch'#'gpt-4o-2024-08-06' #"meta-llama/Meta-Llama-3-70B-Instruct"
+    openai_model_names = ['gpt-4o-2024-05-13','gpt-3.5-turbo-0125'] # list all the api-called model here
+    model_name = "google/gemma-7b-it" # current model you are running
 
     # setting keys and api tokens
-    use_azure_api = True
+    use_azure_api = False
     azure_endpoint = "your endpoint"
     azure_api_key = "your key"
-    if model_name in openai_model_names: # use openai api
+    if model_name in openai_model_names: # use api
         token = 'your openai token'
         batch_size = 60
     else: 
-        token = 'your hugging face token' # use huggingface models
+        token = 'your huggingface token here' # use huggingface models
         batch_size = 15
     
     root_file_name = model_name.split('/')[-1].replace('-','_')
-    root_file_name = root_file_name + 'azure_test'
+    root_file_name = root_file_name + '_enhanced_100_final'
     csv_file_name = f'{root_file_name}.csv'
     log_file_root_path = f'log_{root_file_name}/'
     multiply_factor = 0.3 # 50*0.3 = 15 steps, this control max_step
-    temperature = 0.5
+    temperature = 0.001 # should be 0.01 for Huggingface models to avoid repeating prompt
     note = None
     
     global_batch_generator = utils.Prompt_batch_generator(model_name = model_name, 
@@ -395,12 +413,12 @@ if __name__ == '__main__':
                                                           )
     
     all_experiment_parameters = []
-    for round_index in [1,2,3]:#[1,2,3,4,5]:#[1,2,3,4,5]:
+    for round_index in [1,2,3,4,5]:#[1,2,3,4,5]:#[1,2,3,4,5]:
         for level in [2,1]: # Level 1 is the oracle setting and agent is provided with ground truth rule
             for puzzle_index in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]:
                 for Do_abduction in [True, False]:
                     for forced_abduction in [False]: # Do not use False abduction (currently disabled)
-                        for puzzle_name in ['Reactor_puzzles']:#['Reactor_puzzles','Art_gallery_puzzles','Function_operator_puzzles']:
+                        for puzzle_name in ['Function_operator_puzzles','Art_gallery_puzzles','Reactor_puzzles']:#['Reactor_puzzles','Art_gallery_puzzles','Function_operator_puzzles']:
                             if level == 1 and Do_abduction:
                                 pass
                             elif not Do_abduction and forced_abduction:

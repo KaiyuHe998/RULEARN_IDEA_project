@@ -898,7 +898,8 @@ class Fixed_pipeline_Function_Operator_one_variable(Fixed_Interact_Pipeline_Obje
                               '1/x' : "'1/x'",
                               'x^2' : '''"x^2" (square of x)''',
                               '|x|' : "'|x|' (absolute value of x)",
-                              'x' : "'x'",}
+                              'x' : "'x'",
+                              '-x' : "'-x' negative x"}
         monomials_information = ','.join([monomials_str_dict[monomial] for monomial in list(self.Final_used_monomials.keys())[:-1]])
         if len(self.Final_used_monomials) >= 2:
             monomials_information += ' and ' + monomials_str_dict[list(self.Final_used_monomials.keys())[-1]]
@@ -953,7 +954,7 @@ class Fixed_pipeline_Function_Operator_one_variable(Fixed_Interact_Pipeline_Obje
     
     def _init_functions(self):
         function_strs = self.Special_label.split(',')
-        self.Show_formula_bool = ast.literal_eval(function_strs[0])
+        self.Show_formula_bool = ast.literal_eval(function_strs[0]) # If show this function to agent this is oracle setting
         function_strs = function_strs[1:]
         monomials_mapping_dict = {'sin(x)' : 'math.sin({x})',
                                   '1/x' : '1/{x}',

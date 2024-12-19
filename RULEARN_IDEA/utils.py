@@ -19,12 +19,12 @@ from openai import AzureOpenAI
 global_tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
 
 # ---------------------------------------------------Basic utils---------------------------------------------------
-def sms(material_string:str, separate_token = '_'): # separate material string since tokenizer may recognize ABC as AB C which is not expected
-    assert ' ' not in material_string and separate_token not in material_string, f'''Material should not contain space and be a continual string with uppercase letters'''
+def sms(material_string:str, separate_token = ''): # separate material string since tokenizer may recognize ABC as AB C which is not expected
+    #assert ' ' not in material_string and separate_token not in material_string, f'''Material should not contain space and be a continual string with uppercase letters'''
     letter_list = list(material_string)
     return separate_token.join(letter_list)
 
-def rsms(material_string:str, separate_token = '_'): # combine material string by deleting defined separate_token (predefined interation need continual strings)
+def rsms(material_string:str, separate_token = ''): # combine material string by deleting defined separate_token (predefined interation need continual strings)
     return material_string.replace(separate_token, '')
     
 
@@ -451,21 +451,22 @@ class Prompt_batch_generator:
 
     
     def _generate_with_hg_model(self, input_data):
-        input_ids = self.Tokenizer(input_data, return_tensors="pt", padding=True).to("cuda")
-        outputs = self.Model.generate(**input_ids,
-                                      max_new_tokens=self.max_length,     
-                                      num_beams=1,                
-                                      temperature=self.temperature,            
-                                      top_p=None,                 
-                                      top_k=None)
-        generated_str = [self.Tokenizer.decode(outputs[i],skip_special_tokens=True) for i in range(len(outputs))]
-        new_generated_outputs = []
-        #assert len(generated_str) == len(input_data), f'''generated sequence length is not the same as input'''
-        for item1, item2 in zip(self.batch_data, generated_str):
-            new_content = item2[len(item1):]
-            if 'sistant' in new_content:
-                new_content = '\n'.join(new_content.split('\n')[1:])
-            new_generated_outputs.append(new_content)
+        with torch.inference_mode():
+            input_ids = self.Tokenizer(input_data, return_tensors="pt", padding=True).to("cuda")
+            outputs = self.Model.generate(**input_ids,
+                                          max_new_tokens=self.max_length,     
+                                          num_beams=1,                
+                                          temperature=self.temperature,            
+                                          top_p=None,                 
+                                          top_k=None)
+            generated_str = [self.Tokenizer.decode(outputs[i],skip_special_tokens=True) for i in range(len(outputs))]
+            new_generated_outputs = []
+            #assert len(generated_str) == len(input_data), f'''generated sequence length is not the same as input'''
+            for item1, item2 in zip(self.batch_data, generated_str):
+                new_content = item2[len(item1):]
+                if 'sistant' in new_content:
+                    new_content = '\n'.join(new_content.split('\n')[1:])
+                new_generated_outputs.append(new_content)
         return new_generated_outputs
         
     def generate_with_hg_model(self):
@@ -603,7 +604,7 @@ def Prompt_constructor_for_system(Model_name:str,
                                   print_generated_str:bool = False,
                                   print_prompt_and_input:bool = False,
                                   generative_mode:str = "Default",
-                                  temperature:float = 0.7,
+                                  temperature:float = 0,
                                   logging_label:Optional[str] = None,
                                  ) -> Callable[...,Dict[str,Any]]:
     '''Prompt_constructor generate the prompt, decorator function helps generate/parse/use generated result'''
@@ -662,7 +663,7 @@ def Prompt_constructor_for_system(Model_name:str,
 def generate_with_prompt_and_input(Model_name:str, 
                                    Prompt:str, 
                                    Input:str,
-                                   temperature:float = 0.7):
+                                   temperature:float = 0):
         messages = [
                 {"role": "system", "content":Prompt},
                 {"role": "user", "content": Input},
@@ -686,7 +687,7 @@ def generative_session_with_prompt_and_input(Model_name:str,
                                              Init_input:str, 
                                              stop_sign:str = "End", 
                                              feed_back_mode:str = 'Default',
-                                             temperature:float = 0.7):
+                                             temperature:float = 0):
     messages = [
             {"role": "system", "content":Init_prompt},
             {"role": "user", "content": Init_input},
